@@ -1,0 +1,157 @@
+.room-reconstructor {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.room-reconstructor h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.room-info {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-left: 4px solid #007bff;
+}
+
+.upload-section {
+  margin-bottom: 20px;
+}
+
+.upload-section input[type="file"] {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.loading {
+  color: #007bff;
+  font-style: italic;
+  margin: 10px 0;
+}
+
+.error {
+  color: #dc3545;
+  background: #f8d7da;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.original-image {
+  margin: 20px 0;
+}
+
+.original-image img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.reconstructed-room-container {
+  margin-top: 20px;
+}
+
+.reconstructed-room-container h3 {
+  margin-bottom: 10px;
+}
+
+.reconstructed-room {
+  position: relative;
+  background: #f8f9fa;
+  margin: 10px 0;
+}
+
+.texture {
+  position: absolute;
+}
+
+.object {
+  position: absolute;
+  cursor: move;
+}
+
+.texture.wall {
+  background: linear-gradient(135deg, #d2b48c, #e0c7a3);
+}
+
+.texture.floor {
+  background: linear-gradient(135deg, #8b4513, #a0522d);
+}
+
+.texture.window {
+  background: linear-gradient(135deg, #87ceeb, #b0e0e6);
+  border: 2px solid #4682b4;
+}
+
+.texture.door {
+  background: linear-gradient(135deg, #654321, #8b4513);
+  border: 1px solid #3d2b1f;
+}
+
+.object.sofa {
+  background: linear-gradient(135deg, #8B4513, #A0522D);
+  border: 1px solid #6b4d2a;
+  border-radius: 4px;
+}
+
+.object.bed {
+  background: linear-gradient(135deg, #CD5C5C, #A52A2A);
+  border: 1px solid #800000;
+  border-radius: 4px;
+}
+
+.object.nightstand {
+  background: linear-gradient(135deg, #A0522D, #8B4513);
+  border: 1px solid #7a3c24;
+  border-radius: 3px;
+}
+
+.object.coffee_table {
+  background: linear-gradient(135deg, #D2B48C, #F5DEB3);
+  border: 1px solid #b8a17d;
+  border-radius: 4px;
+}
+
+.object.tv {
+  background: linear-gradient(135deg, #333333, #000000);
+  border: 1px solid #111111;
+  border-radius: 2px;
+}
+
+.object.counter {
+  background: linear-gradient(135deg, #DDC488, #F5F5DC);
+  border: 1px solid #d0b980;
+  border-radius: 4px;
+}
+
+.object.refrigerator {
+  background: linear-gradient(135deg, #C0C0C0, #E0E0E0);
+  border: 1px solid #a0a0a0;
+  border-radius: 4px;
+}
+
+.object.toilet {
+  background: linear-gradient(135deg, #FFFFFF, #F8F8F8);
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+}
+
+.object.sink {
+  background: linear-gradient(135deg, #ADD8E6, #B0E0E6);
+  border: 1px solid #87ceeb;
+  border-radius: 3px;
+}
+
+.object.bathtub {
+  background: linear-gradient(135deg, #87CEEB, #B0E0E6);
+  border: 1px solid #4682b4;
+  border-radius: 8px;
+}

@@ -2,6 +2,7 @@ import './App.css';
 import RoomUploader from './components/RoomUploader';
 import RoomViewer from './components/RoomViewer';
 import ObjectLibrary from './components/ObjectLibrary';
+import RoomReconstructor from './components/RoomReconstructor';
 import { useState } from 'react';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <main className="app-main">
         <div className="upload-section">
           <RoomUploader onRoomUpload={setRoomData} />
+          <RoomReconstructor />
         </div>
         
         {roomData && (
