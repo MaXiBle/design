@@ -23,10 +23,12 @@ src/
 │   ├── ObjectLibrary.jsx     # Library of furniture objects
 │   └── RoomReconstructor.jsx # Neural network room reconstruction component
 ├── utils/
-│   └── neuralNetwork.js      # Neural network logic
+│   └── neuralNetwork.js      # Neural network logic with TensorFlow.js integration
 ├── App.jsx                   # Main application component
 ├── main.jsx                  # Entry point
 └── App.css                   # Global styles
+public/
+└── tfjs-loader.js            # TensorFlow.js dynamic loading script
 ```
 
 ## How It Works
@@ -39,7 +41,11 @@ src/
 
 ## Neural Network Room Reconstruction
 
-The `RoomReconstructor` component uses a simulated neural network to convert a single room photo into a 2D reconstruction. It analyzes the image and creates a textured 2D representation of the room with approximate dimensions and furniture placement. For details, see [NEURAL_NETWORK.md](./NEURAL_NETWORK.md).
+The `RoomReconstructor` component uses a neural network to convert a single room photo into a 2D reconstruction. It analyzes the image and creates a textured 2D representation of the room with approximate dimensions and furniture placement based on the room type. The system is designed with TensorFlow.js integration points for real neural network deployment.
+
+Currently, the implementation includes a simulation that demonstrates the expected behavior. In a production environment, this would connect to an actual trained neural network model.
+
+For implementation details, see [NEURAL_NETWORK.md](./NEURAL_NETWORK.md) and [NEURAL_NETWORK_INTEGRATION.md](./NEURAL_NETWORK_INTEGRATION.md).
 
 ## Technical Implementation
 
