@@ -1,6 +1,6 @@
 """
-Minimal Room to 2D Plan Converter (without heavy dependencies)
-This is a simplified version for demonstration purposes.
+Минимальный конвертер фото комнаты в 2D план (без тяжелых зависимостей)
+Это упрощенная версия для целей демонстрации.
 """
 import json
 from typing import Dict, List, Tuple, Optional
@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 class RoomTo2DConverter:
     """
-    Minimal neural network class for converting room photos to 2D plans.
-    This is a simplified version that simulates the functionality without heavy dependencies.
+    Минимальный класс нейронной сети для преобразования фото комнат в 2D планы.
+    Это упрощенная версия, которая имитирует функциональность без тяжелых зависимостей.
     """
     
     def __init__(self, model_path: Optional[str] = None):
