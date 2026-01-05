@@ -1,8 +1,7 @@
 """
-Room to 2D Plan Converter - Python Neural Network Module
+Self-Learning Room to 2D Plan Converter - Python Neural Network Module
 """
-from .minimal_room_converter import RoomTo2DConverter
-from .minimal_model_trainer import ModelTrainer
+from .self_learning_room_converter import RoomConversionAPI
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 __author__ = "Interior Design App"

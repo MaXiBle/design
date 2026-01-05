@@ -1,6 +1,6 @@
 """
-API Wrapper for Room to 2D Plan Converter
-This module provides a Flask-based API to interface with the Python neural network module
+API Wrapper for Self-Learning Room to 2D Plan Converter
+This module provides a Flask-based API to interface with the self-learning Python neural network module
 and make it accessible to the JavaScript frontend.
 """
 import os
@@ -13,26 +13,23 @@ from PIL import Image
 import base64
 import tempfile
 
-from python_neural_network import RoomTo2DConverter
+from python_neural_network.self_learning_room_converter import RoomConversionAPI
 
 
 class Room2DAPIServer:
     """
-    Flask API server that wraps the Room to 2D converter functionality
+    Flask API server that wraps the Self-Learning Room to 2D converter functionality
     """
     
-    def __init__(self, model_path=None):
+    def __init__(self):
         """
         Initialize the API server
-        
-        Args:
-            model_path: Path to a pre-trained model (optional)
         """
         self.app = Flask(__name__)
         CORS(self.app)  # Enable CORS for cross-origin requests
         
-        # Initialize the converter
-        self.converter = RoomTo2DConverter(model_path)
+        # Initialize the self-learning converter
+        self.api = RoomConversionAPI()
         
         # Register routes
         self._register_routes()
@@ -45,7 +42,7 @@ class Room2DAPIServer:
             """Health check endpoint"""
             return jsonify({
                 'status': 'healthy',
-                'model_loaded': self.converter.model is not None
+                'model_loaded': self.api.model is not None
             })
         
         @self.app.route('/convert', methods=['POST'])
@@ -84,8 +81,8 @@ class Room2DAPIServer:
                 else:
                     return jsonify({'error': 'Invalid image format'}), 400
                 
-                # Process the image
-                result = self.converter.predict(image_path)
+                # Process the image using self-learning model
+                result = self.api.convert_room_to_plan(image_path)
                 
                 # Clean up temporary file
                 os.unlink(image_path)
@@ -126,8 +123,8 @@ class Room2DAPIServer:
                     tmp.write(response.content)
                     image_path = tmp.name
                 
-                # Process the image
-                result = self.converter.predict(image_path)
+                # Process the image using self-learning model
+                result = self.api.convert_room_to_plan(image_path)
                 
                 # Clean up temporary file
                 os.unlink(image_path)
@@ -145,6 +142,29 @@ class Room2DAPIServer:
                     except:
                         pass
                 
+                return jsonify({'error': str(e)}), 500
+        
+        @self.app.route('/submit_feedback', methods=['POST'])
+        def submit_feedback():
+            """Submit user feedback to improve the model"""
+            try:
+                data = request.get_json()
+                if not data or 'plan_data' not in data or 'user_score' not in data:
+                    return jsonify({'error': 'Plan data and user score required'}), 400
+                
+                plan_data = data['plan_data']
+                user_score = data['user_score']
+                
+                # Validate score range
+                if not 0 <= user_score <= 5:
+                    return jsonify({'error': 'User score must be between 0 and 5'}), 400
+                
+                # Submit feedback to self-learning model
+                result = self.api.submit_feedback(plan_data, user_score)
+                
+                return jsonify(result)
+                
+            except Exception as e:
                 return jsonify({'error': str(e)}), 500
     
     def _make_serializable(self, obj):
@@ -176,17 +196,14 @@ class Room2DAPIServer:
         self.app.run(host=host, port=port, debug=debug)
 
 
-def create_api_server(model_path=None):
+def create_api_server():
     """
     Factory function to create an API server instance
     
-    Args:
-        model_path: Path to a pre-trained model (optional)
-        
     Returns:
         Room2DAPIServer instance
     """
-    return Room2DAPIServer(model_path)
+    return Room2DAPIServer()
 
 
 if __name__ == "__main__":

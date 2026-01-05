@@ -1,125 +1,86 @@
 #!/usr/bin/env python3
 """
-Demo script for the Room to 2D Plan Converter
-This script demonstrates the usage of the Python neural network module
+Demo script for the Self-Learning Room to 2D Plan Converter
+This script demonstrates the usage of the self-learning Python neural network module
 """
 import os
 import sys
 import json
-from python_neural_network import RoomTo2DConverter, ModelTrainer
+from python_neural_network.self_learning_room_converter import RoomConversionAPI
 
 
 def main():
-    print("Room to 2D Plan Converter - Demo")
-    print("=" * 40)
+    print("Self-Learning Room to 2D Plan Converter - Demo")
+    print("=" * 50)
     
-    # Step 1: Initialize the converter
-    print("\n1. Initializing Room to 2D Converter...")
-    converter = RoomTo2DConverter()
-    print("✓ Converter initialized successfully")
+    # Step 1: Initialize the self-learning converter
+    print("\n1. Initializing Self-Learning Room to 2D Converter...")
+    api = RoomConversionAPI()
+    print("✓ Self-learning converter initialized successfully")
     
-    # Step 2: Show the model architecture
+    # Step 2: Show the model architecture concept
     print("\n2. Model Architecture:")
-    if converter.model:
-        converter.model.summary()
-    else:
-        print("  Model not built yet")
+    print("  - Uses pre-trained models for object detection (Faster R-CNN)")
+    print("  - Wall detection using OpenCV")
+    print("  - Quality evaluation network that learns from user feedback")
+    print("  - Feedback system using SQLite database")
     
-    # Step 3: Create sample training data
-    print("\n3. Creating sample training data...")
-    from python_neural_network.model_trainer import create_sample_training_data
-    sample_data_dir = './sample_data'
-    create_sample_training_data(sample_data_dir)
-    print(f"✓ Sample data created in {sample_data_dir}/")
-    
-    # Step 4: Initialize trainer
-    print("\n4. Initializing Model Trainer...")
-    trainer = ModelTrainer(model_save_path='./models/demo_room_converter')
-    print("✓ Trainer initialized successfully")
-    
-    # Step 5: Brief training demonstration (with minimal epochs for demo)
-    print("\n5. Starting training demonstration (minimal epochs for demo)...")
-    try:
-        history = trainer.train_model(
-            data_dir=sample_data_dir,
-            epochs=3,  # Minimal epochs for demo
-            batch_size=4
-        )
-        print("✓ Training completed")
-        
-        # Save training history
-        trainer.save_training_history('./models/demo_training_history.json')
-        print("✓ Training history saved")
-        
-    except Exception as e:
-        print(f"⚠ Training demo failed: {e}")
-        print("  This is expected if TensorFlow is not properly configured")
-    
-    # Step 6: Demonstrate prediction with sample data
-    print("\n6. Demonstrating prediction format...")
+    # Step 3: Demonstrate processing
+    print("\n3. Demonstrating room to 2D plan conversion...")
     
     # Show what a typical prediction would look like
     sample_prediction = {
-        'room_type': 'living_room',
-        'confidence': 0.87,
+        'image_shape': [480, 640, 3],
+        'furniture': [
+            {
+                'class': 'couch',
+                'confidence': 0.92,
+                'bbox': [100, 200, 300, 350]  # [x1, y1, x2, y2]
+            },
+            {
+                'class': 'dining table',
+                'confidence': 0.87,
+                'bbox': [250, 300, 400, 400]
+            }
+        ],
         'walls': [
             {
-                'id': 1,
                 'type': 'wall',
-                'coordinates': {'x1': 0.0, 'y1': 0.0, 'x2': 1.0, 'y2': 0.0},
-                'color': '#d2b48c'
+                'coordinates': [50, 50, 590, 50],
+                'length': 540.0
             },
             {
-                'id': 2,
                 'type': 'wall',
-                'coordinates': {'x1': 1.0, 'y1': 0.0, 'x2': 1.0, 'y2': 1.0},
-                'color': '#d2b48c'
+                'coordinates': [590, 50, 590, 430],
+                'length': 380.0
             },
             {
-                'id': 3,
-                'type': 'wall',
-                'coordinates': {'x1': 1.0, 'y1': 1.0, 'x2': 0.0, 'y2': 1.0},
-                'color': '#d2b48c'
-            },
-            {
-                'id': 4,
-                'type': 'wall',
-                'coordinates': {'x1': 0.0, 'y1': 1.0, 'x2': 0.0, 'y2': 0.0},
-                'color': '#d2b48c'
+                'type': 'room_boundary',
+                'coordinates': [[50, 50], [590, 50], [590, 430], [50, 430]]
             }
         ],
-        'objects': [
-            {
-                'id': 1,
-                'type': 'sofa',
-                'coordinates': {'x': 0.2, 'y': 0.6, 'width': 0.4, 'height': 0.2}
-            },
-            {
-                'id': 2,
-                'type': 'coffee_table',
-                'coordinates': {'x': 0.4, 'y': 0.7, 'width': 0.2, 'height': 0.15}
-            },
-            {
-                'id': 3,
-                'type': 'tv',
-                'coordinates': {'x': 0.1, 'y': 0.1, 'width': 0.3, 'height': 0.1}
-            }
-        ],
-        'dimensions': {'width': 800, 'height': 600}
+        'timestamp': '2023-12-01T10:00:00',
+        'predicted_quality': 3.8
     }
     
     print("Sample prediction output:")
     print(json.dumps(sample_prediction, indent=2))
     
-    print("\n7. Starting API Server...")
+    print("\n4. Self-Learning Process:")
+    print("  - Model generates 2D plan from room photo")
+    print("  - You rate the result from 0 (worst) to 5 (best)")
+    print("  - Model learns from your feedback to improve future predictions")
+    print("  - Ratings stored in SQLite database for analysis")
+    
+    print("\n5. Starting API Server...")
     print("To start the full API server, run: python api_wrapper.py")
     print("The API provides endpoints for integrating with JavaScript frontend")
     
     print("\nDemo completed!")
     print("\nNext steps:")
-    print("1. Prepare your own room photos and labels")
-    print("2. Train the model with your data")
-    print("3. Use the trained model for predictions")
+    print("1. Provide room photos for conversion")
+    print("2. Rate the generated 2D plans (0-5 scale)")
+    print("3. Model will improve based on your feedback")
     print("4. Integrate with your JavaScript application using the API")
 
 

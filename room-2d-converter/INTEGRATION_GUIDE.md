@@ -1,14 +1,16 @@
-# Integration Guide: Python Neural Network with JavaScript Frontend
+# Integration Guide: Self-Learning Python Neural Network with JavaScript Frontend
 
-This guide explains how to integrate the Python neural network module with your JavaScript frontend application.
+This guide explains how to integrate the self-learning Python neural network module with your JavaScript frontend application.
 
 ## Overview
 
-The Python neural network module is designed to work alongside your JavaScript application through a REST API. The architecture follows this pattern:
+The self-learning Python neural network module is designed to work alongside your JavaScript application through a REST API. The architecture follows this pattern:
 
 ```
-JavaScript Frontend ←→ Flask API ←→ Python Neural Network
+JavaScript Frontend ←→ Flask API ←→ Self-Learning Python Neural Network
 ```
+
+The key feature of this system is that it learns from user feedback to improve its 2D plan generation. Users rate the generated plans from 0 (worst) to 5 (best), and the model uses this feedback to improve future predictions.
 
 ## Running the API Server
 
@@ -48,7 +50,7 @@ Response:
 POST /convert
 ```
 
-Convert a room photo to a 2D plan.
+Convert a room photo to a 2D plan using the self-learning model.
 
 #### Option 1: File Upload
 - Form field: `image` (file)
@@ -79,6 +81,25 @@ Request body:
   "image_url": "https://example.com/room_photo.jpg"
 }
 ```
+
+### Submit User Feedback
+```
+POST /submit_feedback
+```
+
+Submit user rating (0-5) to improve the self-learning model.
+
+Content-Type: `application/json`
+
+Request body:
+```json
+{
+  "plan_data": { /* full plan object returned from /convert */ },
+  "user_score": 4
+}
+```
+
+The user_score should be between 0 (worst) and 5 (best).
 
 ## JavaScript Integration
 
@@ -141,31 +162,69 @@ const reconstructRoomFromBase64 = async (imageBase64) => {
 };
 ```
 
-### 3. CORS Configuration
+### 3. Submitting User Feedback
+
+To enable the self-learning functionality, you need to implement a feedback mechanism in your JavaScript application:
+
+```javascript
+// Function to submit user rating for the generated plan
+const submitFeedback = async (planData, userScore) => {
+  try {
+    const response = await fetch('http://localhost:5000/submit_feedback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        plan_data: planData,
+        user_score: userScore
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Feedback submitted successfully:', result);
+    return result;
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+  }
+};
+
+// Example usage: after displaying the 2D plan to the user
+const handleUserRating = async (planData, rating) => {
+  // rating should be between 0 and 5
+  await submitFeedback(planData, rating);
+};
+```
+
+### 4. CORS Configuration
 
 The Flask API includes CORS headers to allow requests from your frontend. If you're running the frontend on a different port, you may need to configure CORS properly.
 
 ## Configuration Options
 
-### Using a Pre-trained Model
+### Model Initialization
 
-You can initialize the API server with a specific model:
+Model initialization happens automatically when the API server starts:
 
 ```python
 # In your application
-api_server = Room2DAPIServer(model_path='./path/to/your/model.h5')
+api_server = Room2DAPIServer()
 api_server.run()
 ```
 
 ### Custom API Server
 
-You can also create a custom server with additional configuration:
+You can create a custom server with additional configuration:
 
 ```python
 from api_wrapper import Room2DAPIServer
 
 # Create server instance
-server = Room2DAPIServer(model_path='./models/room_converter_final.h5')
+server = Room2DAPIServer()
 
 # Access the Flask app for additional configuration if needed
 app = server.app
@@ -185,7 +244,7 @@ For production, pre-load your trained model:
 
 ```python
 # Load the best trained model
-api_server = Room2DAPIServer(model_path='./models/room_converter_best.h5')
+api_server = Room2DAPIServer()
 ```
 
 ### 2. Security
