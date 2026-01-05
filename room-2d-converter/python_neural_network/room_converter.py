@@ -1,6 +1,6 @@
 """
-Room to 2D Plan Converter using Deep Learning
-This module implements a neural network for converting room photos to 2D floor plans.
+Конвертер фото комнаты в 2D план с использованием глубокого обучения
+Этот модуль реализует нейронную сеть для преобразования фото комнат в 2D планы помещений.
 """
 import os
 import cv2
@@ -19,16 +19,16 @@ logger = logging.getLogger(__name__)
 
 class RoomTo2DConverter:
     """
-    Neural network class for converting room photos to 2D plans.
-    Uses a CNN-based architecture for image analysis and plan generation.
+    Класс нейронной сети для преобразования фото комнат в 2D планы.
+    Использует архитектуру на основе сверточных нейронных сетей для анализа изображений и генерации планов.
     """
     
     def __init__(self, model_path: Optional[str] = None):
         """
-        Initialize the Room to 2D converter.
+        Инициализирует конвертер фото комнаты в 2D план.
         
         Args:
-            model_path: Path to a pre-trained model. If None, creates a new model.
+            model_path: Путь к предварительно обученной модели. Если None, создает новую модель.
         """
         self.model = None
         self.is_trained = False
@@ -41,11 +41,11 @@ class RoomTo2DConverter:
     
     def build_model(self):
         """
-        Build the neural network model for room to 2D conversion.
-        The architecture includes:
-        - Feature extraction using CNN layers
-        - Classification head for room type detection
-        - Segmentation head for element detection
+        Создает модель нейронной сети для преобразования фото комнат в 2D планы.
+        Архитектура включает:
+        - Извлечение признаков с использованием слоев CNN
+        - Классификацию типа комнаты
+        - Сегментацию элементов
         """
         # Input layer
         input_layer = keras.Input(shape=self.input_shape)
@@ -120,13 +120,13 @@ class RoomTo2DConverter:
     
     def preprocess_image(self, image_path: str) -> np.ndarray:
         """
-        Preprocess the input image for the neural network.
+        Предобрабатывает входное изображение для нейронной сети.
         
         Args:
-            image_path: Path to the input image
+            image_path: Путь к входному изображению
             
         Returns:
-            Preprocessed image as numpy array
+            Предобработанное изображение в виде массива numpy
         """
         # Load image
         image = cv2.imread(image_path)
@@ -149,13 +149,13 @@ class RoomTo2DConverter:
     
     def predict(self, image_path: str) -> Dict:
         """
-        Predict 2D plan from room photo.
+        Предсказывает 2D план по фото комнаты.
         
         Args:
-            image_path: Path to the input room photo
+            image_path: Путь к входному фото комнаты
             
         Returns:
-            Dictionary containing the 2D plan information
+            Словарь, содержащий информацию о 2D плане
         """
         if self.model is None:
             raise ValueError("Model not initialized")
@@ -193,13 +193,13 @@ class RoomTo2DConverter:
     
     def _decode_walls(self, walls_pred: np.ndarray) -> List[Dict]:
         """
-        Decode wall predictions from neural network output.
+        Декодирует предсказания стен из выходных данных нейронной сети.
         
         Args:
-            walls_pred: Raw wall predictions from the model
+            walls_pred: Необработанные предсказания стен из модели
             
         Returns:
-            List of wall objects
+            Список объектов стен
         """
         walls = []
         
@@ -231,14 +231,14 @@ class RoomTo2DConverter:
     
     def _decode_objects(self, objects_pred: np.ndarray, room_type: str) -> List[Dict]:
         """
-        Decode object predictions from neural network output based on room type.
+        Декодирует предсказания объектов из выходных данных нейронной сети на основе типа комнаты.
         
         Args:
-            objects_pred: Raw object predictions from the model
-            room_type: Type of room to determine which objects to expect
+            objects_pred: Необработанные предсказания объектов из модели
+            room_type: Тип комнаты для определения ожидаемых объектов
             
         Returns:
-            List of object dictionaries
+            Список словарей объектов
         """
         objects = []
         
@@ -283,10 +283,10 @@ class RoomTo2DConverter:
     
     def save_model(self, filepath: str):
         """
-        Save the trained model to disk.
+        Сохраняет обученную модель на диск.
         
         Args:
-            filepath: Path where to save the model
+            filepath: Путь, по которому нужно сохранить модель
         """
         if self.model is not None:
             self.model.save(filepath)
@@ -296,10 +296,10 @@ class RoomTo2DConverter:
     
     def load_model(self, filepath: str):
         """
-        Load a pre-trained model from disk.
+        Загружает предварительно обученную модель с диска.
         
         Args:
-            filepath: Path to the saved model
+            filepath: Путь к сохраненной модели
         """
         self.model = keras.models.load_model(filepath)
         self.is_trained = True
@@ -307,13 +307,13 @@ class RoomTo2DConverter:
     
     def train(self, train_data, val_data, epochs=50, batch_size=32):
         """
-        Train the model on provided data.
+        Обучает модель на предоставленных данных.
         
         Args:
-            train_data: Training data generator or tuple (X, y)
-            val_data: Validation data generator or tuple (X, y)
-            epochs: Number of training epochs
-            batch_size: Batch size for training
+            train_data: Генератор данных для обучения или кортеж (X, y)
+            val_data: Генератор данных для валидации или кортеж (X, y)
+            epochs: Количество эпох обучения
+            batch_size: Размер пакета для обучения
         """
         logger.info("Starting model training...")
         
@@ -341,14 +341,14 @@ class RoomTo2DConverter:
 # Example usage function
 def convert_room_to_2d_plan(image_path: str, model_path: Optional[str] = None) -> Dict:
     """
-    Convenience function to convert a room photo to a 2D plan.
+    Удобная функция для преобразования фото комнаты в 2D план.
     
     Args:
-        image_path: Path to the room photo
-        model_path: Path to a pre-trained model (optional)
+        image_path: Путь к фото комнаты
+        model_path: Путь к предварительно обученной модели (опционально)
         
     Returns:
-        2D plan as a dictionary
+        2D план в виде словаря
     """
     converter = RoomTo2DConverter(model_path)
     return converter.predict(image_path)

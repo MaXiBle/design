@@ -10,16 +10,14 @@ venv/
 .venv/
 pip-log.txt
 pip-delete-this-directory.txt
-.tox/
+.pytest_cache/
+.mypy_cache/
 .coverage
+htmlcov/
 .coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-*.tmp
-*.swp
+.noserc
+.tox/
+.cover/
 
 # Distribution / packaging
 .Python
@@ -38,7 +36,6 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
 # Environment
 .env
@@ -47,12 +44,15 @@ MANIFEST
 .venv
 venv/
 ENV
+env.bak
+venv.bak
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*.tmp
 
 # OS
 .DS_Store

@@ -1,6 +1,6 @@
 """
-Model Trainer for Room to 2D Plan Converter
-This module handles the training process for the neural network.
+Модуль тренировки модели для конвертера фото комнат в 2D план
+Этот модуль обрабатывает процесс обучения нейронной сети.
 """
 import os
 import numpy as np
@@ -21,16 +21,16 @@ logger = logging.getLogger(__name__)
 
 class ModelTrainer:
     """
-    Class for training the Room to 2D conversion model.
-    Handles data preparation, model training, and evaluation.
+    Класс для обучения модели преобразования фото комнат в 2D план.
+    Обрабатывает подготовку данных, обучение модели и оценку.
     """
     
     def __init__(self, model_save_path: str = "./models/room_converter_model"):
         """
-        Initialize the model trainer.
+        Инициализирует тренер модели.
         
         Args:
-            model_save_path: Path where trained models will be saved
+            model_save_path: Путь, по которому будут сохраняться обученные модели
         """
         self.model_save_path = model_save_path
         self.converter = RoomTo2DConverter()
@@ -41,16 +41,16 @@ class ModelTrainer:
     
     def prepare_data(self, data_dir: str) -> Tuple:
         """
-        Prepare training data from directory structure.
+        Подготавливает обучающие данные из структуры директории.
         
         Args:
-            data_dir: Directory containing training data
-                    Expected structure:
-                    - data_dir/images/ (contains room photos)
-                    - data_dir/labels/ (contains corresponding labels in JSON format)
+            data_dir: Директория, содержащая обучающие данные
+                    Ожидаемая структура:
+                    - data_dir/images/ (содержит фото комнат)
+                    - data_dir/labels/ (содержит соответствующие метки в формате JSON)
                     
         Returns:
-            Tuple of (X_train, X_val, y_train, y_val) data
+            Кортеж (X_train, X_val, y_train, y_val) данных
         """
         logger.info(f"Preparing data from {data_dir}")
         
@@ -104,13 +104,13 @@ class ModelTrainer:
     
     def _load_and_preprocess_image(self, img_path: str) -> np.ndarray:
         """
-        Load and preprocess a single image.
+        Загружает и предобрабатывает одно изображение.
         
         Args:
-            img_path: Path to the image file
+            img_path: Путь к файлу изображения
             
         Returns:
-            Preprocessed image as numpy array
+            Предобработанное изображение в виде массива numpy
         """
         # Load image
         img = tf.keras.utils.load_img(img_path, target_size=(224, 224))
@@ -120,13 +120,13 @@ class ModelTrainer:
     
     def _format_label(self, label_data: Dict) -> Dict[str, np.ndarray]:
         """
-        Format label data to match model outputs.
+        Форматирует данные метки в соответствии с выходами модели.
         
         Args:
-            label_data: Raw label data from JSON
+            label_data: Необработанные данные метки из JSON
             
         Returns:
-            Formatted label dictionary matching model outputs
+            Отформатированный словарь меток, соответствующий выходам модели
         """
         # Room type (one-hot encoded)
         room_types = ['living_room', 'bedroom', 'kitchen', 'bathroom']
@@ -163,10 +163,10 @@ class ModelTrainer:
     
     def _create_dummy_label(self) -> Dict[str, np.ndarray]:
         """
-        Create a dummy label for demonstration purposes.
+        Создает фиктивную метку для целей демонстрации.
         
         Returns:
-            Dummy label dictionary
+            Словарь фиктивной метки
         """
         room_types = np.zeros(4)
         room_types[0] = 1  # Default to living room
@@ -184,13 +184,13 @@ class ModelTrainer:
     
     def _stack_labels(self, labels: list) -> Dict[str, np.ndarray]:
         """
-        Stack multiple label dictionaries into a single dictionary with arrays.
+        Объединяет несколько словарей меток в один словарь с массивами.
         
         Args:
-            labels: List of individual label dictionaries
+            labels: Список отдельных словарей меток
             
         Returns:
-            Dictionary with stacked label arrays
+            Словарь с объединенными массивами меток
         """
         if not labels:
             return {}
@@ -207,16 +207,16 @@ class ModelTrainer:
                    batch_size: int = 32,
                    validation_split: float = 0.2) -> keras.callbacks.History:
         """
-        Train the model on provided data.
+        Обучает модель на предоставленных данных.
         
         Args:
-            data_dir: Directory containing training data
-            epochs: Number of training epochs
-            batch_size: Batch size for training
-            validation_split: Fraction of data to use for validation
+            data_dir: Директория, содержащая обучающие данные
+            epochs: Количество эпох обучения
+            batch_size: Размер пакета для обучения
+            validation_split: Доля данных для использования в валидации
             
         Returns:
-            Training history object
+            Объект истории обучения
         """
         logger.info("Starting model training...")
         
@@ -263,14 +263,14 @@ class ModelTrainer:
     
     def evaluate_model(self, X_test: np.ndarray, y_test: Dict) -> Dict[str, float]:
         """
-        Evaluate the trained model on test data.
+        Оценивает обученную модель на тестовых данных.
         
         Args:
-            X_test: Test images
-            y_test: Test labels
+            X_test: Тестовые изображения
+            y_test: Тестовые метки
             
         Returns:
-            Dictionary with evaluation metrics
+            Словарь с метриками оценки
         """
         if self.converter.model is None:
             raise ValueError("Model not trained yet")
@@ -290,19 +290,19 @@ class ModelTrainer:
     
     def get_training_history(self) -> Optional[keras.callbacks.History]:
         """
-        Get the training history.
+        Получает историю обучения.
         
         Returns:
-            Training history object or None if model hasn't been trained
+            Объект истории обучения или None, если модель еще не обучалась
         """
         return self.history
     
     def save_training_history(self, filepath: str):
         """
-        Save the training history to a JSON file.
+        Сохраняет историю обучения в файл JSON.
         
         Args:
-            filepath: Path where to save the training history
+            filepath: Путь, по которому нужно сохранить историю обучения
         """
         if self.history is None:
             logger.warning("No training history to save")
@@ -318,11 +318,11 @@ class ModelTrainer:
 
 def create_sample_training_data(data_dir: str):
     """
-    Create sample training data for demonstration purposes.
-    This function creates a small sample dataset to demonstrate the training process.
+    Создает пример обучающих данных для целей демонстрации.
+    Эта функция создает небольшой набор данных для демонстрации процесса обучения.
     
     Args:
-        data_dir: Directory where sample data will be created
+        data_dir: Директория, в которой будут созданы примеры данных
     """
     import cv2
     import random
